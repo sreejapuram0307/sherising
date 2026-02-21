@@ -166,7 +166,8 @@
     "noIdeasAvailable": "ఇంకా ఆలోచనలు అందుబాటులో లేవు",
     "fundingGoal": "నిధుల లక్ష్యం:",
     "amountRaised": "సేకరించిన మొత్తం:",
-    "entrepreneur": "వ్యవసాయి"
+    "entrepreneur": "వ్యవసాయి",
+    "filterByLocation": "స్థానం ద్వారా ఫిల్టర్ చేయండి"
   },
   "entrepreneurDashboard": {
     "shareYourIdea": "మీ వ్యాపార ఆలోచనను పంచుకోండి",

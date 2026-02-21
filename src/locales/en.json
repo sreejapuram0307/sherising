@@ -166,7 +166,8 @@
     "noIdeasAvailable": "No ideas available yet",
     "fundingGoal": "Funding Goal:",
     "amountRaised": "Amount Raised:",
-    "entrepreneur": "Entrepreneur"
+    "entrepreneur": "Entrepreneur",
+    "filterByLocation": "Filter by Location"
   },
   "entrepreneurDashboard": {
     "shareYourIdea": "Share Your Business Idea",

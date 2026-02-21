@@ -166,7 +166,8 @@
     "noIdeasAvailable": "अभी तक कोई विचार उपलब्ध नहीं है",
     "fundingGoal": "फंडिंग लक्ष्य:",
     "amountRaised": "जुटाई गई राशि:",
-    "entrepreneur": "उद्यमी"
+    "entrepreneur": "उद्यमी",
+    "filterByLocation": "स्थान के अनुसार फ़िल्टर करें"
   },
   "entrepreneurDashboard": {
     "shareYourIdea": "अपना व्यावसायिक विचार साझा करें",

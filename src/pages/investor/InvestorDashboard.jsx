@@ -20,6 +20,8 @@ const InvestorDashboard = () => {
   const [loading, setLoading] = useState(true)
   const [likedIdeas, setLikedIdeas] = useState([])
   const [entrepreneurBadges, setEntrepreneurBadges] = useState({})
+  const [selectedLocation, setSelectedLocation] = useState('All')
+  const [locations, setLocations] = useState(['All'])
 
   useEffect(() => {
     loadData()
@@ -35,6 +37,10 @@ const InvestorDashboard = () => {
 
       if (ideasResult.success) {
         setIdeas(ideasResult.data)
+        
+        // Extract unique locations from ideas
+        const uniqueLocations = ['All', ...new Set(ideasResult.data.map(idea => idea.location).filter(Boolean))]
+        setLocations(uniqueLocations)
         
         // Fetch entrepreneur badges for all ideas
         const badges = {}
@@ -113,6 +119,11 @@ const InvestorDashboard = () => {
     }
   }
 
+  // Filter ideas based on selected location
+  const filteredIdeas = selectedLocation === 'All' 
+    ? ideas 
+    : ideas.filter(idea => idea.location === selectedLocation)
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -163,15 +174,30 @@ const InvestorDashboard = () => {
         </div>
       </div>
 
-      <h3 className="text-2xl font-bold text-gray-800 mb-4">{t('investorDashboard.entrepreneurIdeas')}</h3>
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-2xl font-bold text-gray-800">{t('investorDashboard.entrepreneurIdeas')}</h3>
+        
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-semibold text-gray-700">{t('investorDashboard.filterByLocation')}:</label>
+          <select
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+            className="rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none px-4 py-2 bg-white"
+          >
+            {locations.map(location => (
+              <option key={location} value={location}>{location}</option>
+            ))}
+          </select>
+        </div>
+      </div>
       
-      {ideas.length === 0 ? (
+      {filteredIdeas.length === 0 ? (
         <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
           <p className="text-gray-600">{t('investorDashboard.noIdeasAvailable')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {ideas.map(idea => {
+          {filteredIdeas.map(idea => {
             const isLiked = likedIdeas.includes(idea._id.toString())
             const entrepreneurBadge = entrepreneurBadges[idea.entrepreneurId]
             
@@ -179,9 +205,16 @@ const InvestorDashboard = () => {
             <div key={idea._id} className="bg-white rounded-2xl shadow-lg p-6 border border-purple-100 hover:shadow-xl transition-all">
               <div className="flex justify-between items-start mb-3">
                 <h4 className="text-xl font-bold text-gray-800">{idea.title}</h4>
-                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">
-                  {idea.category}
-                </span>
+                <div className="flex flex-col gap-1 items-end">
+                  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">
+                    {idea.category}
+                  </span>
+                  {idea.location && (
+                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                      📍 {idea.location}
+                    </span>
+                  )}
+                </div>
               </div>
 
               <p className="text-gray-600 text-sm mb-4">{idea.description}</p>
