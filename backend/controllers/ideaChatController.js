@@ -1,4 +1,5 @@
 import IdeaChat from '../models/IdeaChat.js'
+import BlockedChat from '../models/BlockedChat.js'
 import Idea from '../models/Idea.js'
 import Investment from '../models/Investment.js'
 
@@ -21,6 +22,12 @@ const isParticipant = async (userId, ideaId) => {
   return !!investment
 }
 
+// Check if chat is blocked
+const isChatBlocked = async (ideaId) => {
+  const blocked = await BlockedChat.findOne({ ideaId })
+  return blocked
+}
+
 export const getIdeaMessages = async (req, res) => {
   try {
     const { ideaId } = req.params
@@ -38,10 +45,15 @@ export const getIdeaMessages = async (req, res) => {
       .sort({ createdAt: 1 })
       .populate('senderId', 'name role')
 
+    // Check if chat is blocked
+    const blockedInfo = await isChatBlocked(ideaId)
+
     res.status(200).json({
       success: true,
       count: messages.length,
-      data: messages
+      data: messages,
+      isBlocked: !!blockedInfo,
+      blockedBy: blockedInfo ? blockedInfo.blockedBy : null
     })
   } catch (error) {
     res.status(500).json({
@@ -68,6 +80,17 @@ export const sendIdeaMessage = async (req, res) => {
       return res.status(403).json({
         success: false,
         message: 'Access denied. You must be the idea owner or an investor to send messages.'
+      })
+    }
+
+    // Check if chat is blocked
+    const blockedInfo = await isChatBlocked(ideaId)
+    if (blockedInfo) {
+      return res.status(403).json({
+        success: false,
+        message: 'You cannot send messages. This chat has been blocked.',
+        isBlocked: true,
+        blockedBy: blockedInfo.blockedBy
       })
     }
 
@@ -150,6 +173,107 @@ export const markMessagesAsRead = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Messages marked as read'
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const blockChat = async (req, res) => {
+  try {
+    const { ideaId } = req.body
+
+    if (!ideaId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide ideaId'
+      })
+    }
+
+    // Check if user is participant
+    const canAccess = await isParticipant(req.user._id, ideaId)
+    if (!canAccess) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. You must be a participant to block this chat.'
+      })
+    }
+
+    // Check if already blocked
+    const existingBlock = await BlockedChat.findOne({ ideaId })
+    if (existingBlock) {
+      return res.status(400).json({
+        success: false,
+        message: 'This chat is already blocked'
+      })
+    }
+
+    // Create block record
+    const blocked = await BlockedChat.create({
+      ideaId,
+      blockedBy: req.user._id
+    })
+
+    res.status(200).json({
+      success: true,
+      message: 'Chat has been blocked successfully',
+      data: blocked
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const unblockChat = async (req, res) => {
+  try {
+    const { ideaId } = req.body
+
+    if (!ideaId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide ideaId'
+      })
+    }
+
+    // Check if user is participant
+    const canAccess = await isParticipant(req.user._id, ideaId)
+    if (!canAccess) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied. You must be a participant to unblock this chat.'
+      })
+    }
+
+    // Find the block record
+    const blockRecord = await BlockedChat.findOne({ ideaId })
+
+    if (!blockRecord) {
+      return res.status(404).json({
+        success: false,
+        message: 'No block record found for this chat'
+      })
+    }
+
+    // Check if current user is the one who blocked it
+    if (blockRecord.blockedBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Only the user who blocked this chat can unblock it'
+      })
+    }
+
+    // Remove block record
+    await BlockedChat.findOneAndDelete({ ideaId })
+
+    res.status(200).json({
+      success: true,
+      message: 'Chat has been unblocked successfully'
     })
   } catch (error) {
     res.status(500).json({

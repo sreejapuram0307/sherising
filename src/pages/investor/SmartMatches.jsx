@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { matchAPI } from '../../utils/api'
 
 const SmartMatches = () => {
@@ -6,6 +7,7 @@ const SmartMatches = () => {
   const [location, setLocation] = useState('')
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     loadMatches()
@@ -29,6 +31,11 @@ const SmartMatches = () => {
     match.ideaTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
     match.entrepreneur.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const handleConnect = (match) => {
+    // Navigate to chat with the entrepreneur's ID
+    navigate('/investor-dashboard/chat', { state: { contactId: match.entrepreneur._id, contactName: match.entrepreneur.name, contactRole: 'Entrepreneur' } })
+  }
 
   if (loading) {
     return (
@@ -106,9 +113,17 @@ const SmartMatches = () => {
                 <p className="text-sm text-purple-600">📍 {match.location}</p>
               </div>
 
-              <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all">
-                View Details
-              </button>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => handleConnect(match)}
+                  className="flex-1 bg-gradient-to-r from-green-600 to-teal-600 text-white px-4 py-2 rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all"
+                >
+                  💬 Connect
+                </button>
+                <button className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all">
+                  View Details
+                </button>
+              </div>
             </div>
           ))}
         </div>

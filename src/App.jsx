@@ -21,6 +21,7 @@ import InvestorSmartMatches from './pages/investor/SmartMatches'
 import MentorDashboard from './pages/MentorDashboard'
 import AccessDenied from './pages/AccessDenied'
 import Leaderboard from './pages/Leaderboard'
+import BusinessChatBot from './components/BusinessChatBot'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -59,6 +60,7 @@ function App() {
         <Route path="my-ideas" element={<EntrepreneurMyIdeas />} />
         <Route path="community" element={<EntrepreneurCommunity />} />
         <Route path="chat" element={<EntrepreneurChat />} />
+        <Route path="business-chat" element={<BusinessChatBot />} />
         <Route path="learning-hub" element={<EntrepreneurLearningHub />} />
         <Route path="government-schemes" element={<EntrepreneurGovernmentSchemes />} />
         <Route path="ngo-connect" element={<EntrepreneurNGOConnect />} />
@@ -75,6 +77,7 @@ function App() {
         <Route index element={<InvestorDashboard />} />
         <Route path="my-investments" element={<MyInvestments />} />
         <Route path="chat" element={<InvestorChat />} />
+        <Route path="business-chat" element={<BusinessChatBot />} />
         <Route path="smart-matches" element={<InvestorSmartMatches />} />
         <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="profile" element={<InvestorProfile />} />

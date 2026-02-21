@@ -1,52 +1,84 @@
 import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import { chatAPI } from '../../utils/api'
 
 const Chat = () => {
-  const [contacts] = useState([
-    { id: 1, name: 'Rajesh Kumar', role: 'Investor', online: true },
-    { id: 2, name: 'Priya Sharma', role: 'Investor', online: false },
-    { id: 3, name: 'Amit Patel', role: 'Mentor', online: true },
-    { id: 4, name: 'Sneha Reddy', role: 'Investor', online: true },
-    { id: 5, name: 'Vikram Singh', role: 'Mentor', online: false },
-  ])
+  const location = useLocation()
+  const [contacts, setContacts] = useState([])
   const [selectedContact, setSelectedContact] = useState(null)
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
+  const [loading, setLoading] = useState(true)
+  const currentUserId = localStorage.getItem('userId')
   const userName = localStorage.getItem('name') || 'Entrepreneur'
 
   useEffect(() => {
+    loadContacts()
+  }, [])
+
+  useEffect(() => {
+    // If navigated from Smart Matches with a contact
+    if (location.state?.contactId) {
+      const contact = {
+        _id: location.state.contactId,
+        name: location.state.contactName,
+        role: location.state.contactRole,
+        online: true
+      }
+      setSelectedContact(contact)
+      // Add to contacts if not already there
+      setContacts(prev => {
+        const exists = prev.find(c => c._id === contact._id)
+        return exists ? prev : [contact, ...prev]
+      })
+    }
+  }, [location.state])
+
+  useEffect(() => {
     if (selectedContact) {
-      loadMessages(selectedContact.id)
+      loadMessages(selectedContact._id)
+      const interval = setInterval(() => loadMessages(selectedContact._id), 3000)
+      return () => clearInterval(interval)
     }
   }, [selectedContact])
 
-  const loadMessages = (contactId) => {
-    const allMessages = JSON.parse(localStorage.getItem('entrepreneur_messages') || '[]')
-    const filtered = allMessages.filter(
-      msg =>
-        (msg.sender === userName && msg.receiverId === contactId) ||
-        (msg.senderId === contactId && msg.receiver === userName)
-    )
-    setMessages(filtered)
+  const loadContacts = async () => {
+    try {
+      const result = await chatAPI.getContacts()
+      if (result.success) {
+        setContacts(result.data)
+      }
+    } catch (error) {
+      console.error('Error loading contacts:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const sendMessage = () => {
+  const loadMessages = async (contactId) => {
+    try {
+      const result = await chatAPI.getMessages(contactId)
+      if (result.success) {
+        setMessages(result.data)
+      }
+    } catch (error) {
+      console.error('Error loading messages:', error)
+    }
+  }
+
+  const sendMessage = async () => {
     if (!newMessage.trim() || !selectedContact) return
 
-    const message = {
-      sender: userName,
-      senderId: 'entrepreneur',
-      receiver: selectedContact.name,
-      receiverId: selectedContact.id,
-      message: newMessage,
-      timestamp: new Date().toLocaleTimeString()
+    try {
+      const result = await chatAPI.sendMessage(selectedContact._id, newMessage)
+      if (result.success) {
+        setMessages([...messages, result.data])
+        setNewMessage('')
+      }
+    } catch (error) {
+      console.error('Error sending message:', error)
+      alert('Failed to send message')
     }
-
-    const allMessages = JSON.parse(localStorage.getItem('entrepreneur_messages') || '[]')
-    allMessages.push(message)
-    localStorage.setItem('entrepreneur_messages', JSON.stringify(allMessages))
-    
-    setMessages([...messages, message])
-    setNewMessage('')
   }
 
   return (
@@ -56,34 +88,40 @@ const Chat = () => {
       <div className="grid grid-cols-3 gap-6 h-[600px]">
         <div className="col-span-1 bg-white rounded-2xl shadow-lg p-4 border border-purple-100 overflow-y-auto">
           <h3 className="font-semibold text-gray-800 mb-4">Contacts</h3>
-          <div className="space-y-2">
-            {contacts.map(contact => (
-              <div
-                key={contact.id}
-                onClick={() => setSelectedContact(contact)}
-                className={`p-3 rounded-xl cursor-pointer transition-all ${
-                  selectedContact?.id === contact.id
-                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                    : 'bg-purple-50 hover:bg-purple-100'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center text-white font-semibold">
-                      {contact.name.charAt(0)}
+          {loading ? (
+            <div className="text-center text-gray-500 py-4">Loading...</div>
+          ) : contacts.length === 0 ? (
+            <div className="text-center text-gray-500 py-4">No contacts yet</div>
+          ) : (
+            <div className="space-y-2">
+              {contacts.map(contact => (
+                <div
+                  key={contact._id}
+                  onClick={() => setSelectedContact(contact)}
+                  className={`p-3 rounded-xl cursor-pointer transition-all ${
+                    selectedContact?._id === contact._id
+                      ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                      : 'bg-purple-50 hover:bg-purple-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex items-center justify-center text-white font-semibold">
+                        {contact.name.charAt(0)}
+                      </div>
+                      {contact.online && (
+                        <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                      )}
                     </div>
-                    {contact.online && (
-                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{contact.name}</p>
-                    <p className="text-xs opacity-80">{contact.role}</p>
+                    <div className="flex-1">
+                      <p className="font-medium text-sm">{contact.name}</p>
+                      <p className="text-xs opacity-80">{contact.role}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="col-span-2 bg-white rounded-2xl shadow-lg border border-purple-100 flex flex-col">
@@ -107,23 +145,28 @@ const Chat = () => {
                     No messages yet. Start the conversation!
                   </div>
                 ) : (
-                  messages.map((msg, idx) => (
-                    <div
-                      key={idx}
-                      className={`flex ${msg.sender === userName ? 'justify-end' : 'justify-start'}`}
-                    >
+                  messages.map((msg, idx) => {
+                    const isCurrentUser = msg.senderId._id === currentUserId
+                    return (
                       <div
-                        className={`max-w-xs px-4 py-2 rounded-2xl ${
-                          msg.sender === userName
-                            ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                            : 'bg-purple-50 text-gray-800'
-                        }`}
+                        key={idx}
+                        className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
                       >
-                        <p className="text-sm">{msg.message}</p>
-                        <p className="text-xs opacity-70 mt-1">{msg.timestamp}</p>
+                        <div
+                          className={`max-w-xs px-4 py-2 rounded-2xl ${
+                            isCurrentUser
+                              ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                              : 'bg-purple-50 text-gray-800'
+                          }`}
+                        >
+                          <p className="text-sm">{msg.message}</p>
+                          <p className="text-xs opacity-70 mt-1">
+                            {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))
+                    )
+                  })
                 )}
               </div>
 

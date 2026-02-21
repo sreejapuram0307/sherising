@@ -10,6 +10,7 @@ import ideaChatRoutes from './routes/ideaChatRoutes.js'
 import profileRoutes from './routes/profileRoutes.js'
 import matchRoutes from './routes/matchRoutes.js'
 import gamificationRoutes from './routes/gamificationRoutes.js'
+import chatBotRoutes from './routes/chatBotRoutes.js'
 
 dotenv.config()
 
@@ -31,6 +32,7 @@ app.use('/api/idea-chat', ideaChatRoutes)
 app.use('/api/profile', profileRoutes)
 app.use('/api/matches', matchRoutes)
 app.use('/api/gamification', gamificationRoutes)
+app.use('/api/chatbot', chatBotRoutes)
 
 // Health check
 app.get('/', (req, res) => {

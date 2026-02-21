@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { matchAPI } from '../../utils/api'
 
 const SmartMatches = () => {
@@ -6,6 +7,7 @@ const SmartMatches = () => {
   const [location, setLocation] = useState('')
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     loadMatches()
@@ -28,6 +30,11 @@ const SmartMatches = () => {
   const filteredMatches = matches.filter(match =>
     match.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const handleConnect = (investor) => {
+    // Navigate to chat with the investor's ID
+    navigate('/entrepreneur-dashboard/chat', { state: { contactId: investor._id, contactName: investor.name, contactRole: 'Investor' } })
+  }
 
   if (loading) {
     return (
@@ -97,8 +104,11 @@ const SmartMatches = () => {
                 </div>
               </div>
 
-              <button className="w-full mt-4 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:scale-105 transition-all">
-                Connect
+              <button 
+                onClick={() => handleConnect(investor)}
+                className="w-full mt-4 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:scale-105 transition-all"
+              >
+                💬 Connect
               </button>
             </div>
           ))}

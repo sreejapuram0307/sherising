@@ -178,6 +178,30 @@ export const ideaChatAPI = {
       headers: getAuthHeader()
     })
     return response.json()
+  },
+
+  blockChat: async (ideaId) => {
+    const response = await fetch(`${API_URL}/idea-chat/block`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeader()
+      },
+      body: JSON.stringify({ ideaId })
+    })
+    return response.json()
+  },
+
+  unblockChat: async (ideaId) => {
+    const response = await fetch(`${API_URL}/idea-chat/unblock`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeader()
+      },
+      body: JSON.stringify({ ideaId })
+    })
+    return response.json()
   }
 }
 
@@ -207,6 +231,34 @@ export const gamificationAPI = {
 
   getBadgeProgress: async () => {
     const response = await fetch(`${API_URL}/gamification/badge-progress`, {
+      headers: getAuthHeader()
+    })
+    return response.json()
+  }
+}
+
+export const chatBotAPI = {
+  ask: async (question) => {
+    const response = await fetch(`${API_URL}/chatbot/ask`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeader()
+      },
+      body: JSON.stringify({ question })
+    })
+    return response.json()
+  },
+
+  getSuggestions: async () => {
+    const response = await fetch(`${API_URL}/chatbot/suggestions`, {
+      headers: getAuthHeader()
+    })
+    return response.json()
+  },
+
+  getAllQuestions: async () => {
+    const response = await fetch(`${API_URL}/chatbot/questions`, {
       headers: getAuthHeader()
     })
     return response.json()

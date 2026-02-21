@@ -6,6 +6,7 @@ const EntrepreneurSidebar = ({ isOpen }) => {
     { path: '/entrepreneur-dashboard/my-ideas', label: 'My Ideas', icon: '💡' },
     { path: '/entrepreneur-dashboard/community', label: 'Community', icon: '👥' },
     { path: '/entrepreneur-dashboard/chat', label: 'Chat', icon: '💬' },
+    { path: '/entrepreneur-dashboard/business-chat', label: 'Business AI', icon: '🤖' },
     { path: '/entrepreneur-dashboard/learning-hub', label: 'Learning Hub', icon: '📚' },
     { path: '/entrepreneur-dashboard/government-schemes', label: 'Government Schemes', icon: '🏛️' },
     { path: '/entrepreneur-dashboard/ngo-connect', label: 'NGO Connect', icon: '🤝' },

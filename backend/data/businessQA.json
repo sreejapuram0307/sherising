@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "question": "What is a startup?",
+    "answer": "A startup is a newly established business venture in its early stages, typically focused on developing innovative products or services. Startups aim to solve problems, fill market gaps, and scale rapidly with high growth potential.",
+    "keywords": ["startup", "new business", "venture", "company"]
+  },
+  {
+    "id": 2,
+    "question": "How do I find investors for my startup?",
+    "answer": "You can find investors through: 1) Networking events and pitch competitions, 2) Angel investor networks and VC firms, 3) Online platforms like AngelList, 4) Incubators and accelerators, 5) LinkedIn and professional connections. Always prepare a solid pitch deck and business plan.",
+    "keywords": ["find investors", "funding", "angel investors", "venture capital", "vc"]
+  },
+  {
+    "id": 3,
+    "question": "What is a pitch deck?",
+    "answer": "A pitch deck is a presentation (usually 10-15 slides) that provides an overview of your business to potential investors. It typically includes: problem, solution, market size, business model, traction, team, competition, and financial projections.",
+    "keywords": ["pitch deck", "presentation", "slides", "investor presentation"]
+  },
+  {
+    "id": 4,
+    "question": "What is equity funding?",
+    "answer": "Equity funding is when investors provide capital in exchange for ownership shares (equity) in your company. Unlike loans, you don't repay the money, but investors become part-owners and share in profits and decision-making.",
+    "keywords": ["equity", "funding", "shares", "ownership", "investment"]
+  },
+  {
+    "id": 5,
+    "question": "What is the difference between angel investors and venture capitalists?",
+    "answer": "Angel investors are wealthy individuals who invest their own money in early-stage startups (typically $25K-$100K). Venture capitalists (VCs) are professional firms that manage pooled funds from institutions and invest larger amounts ($1M+) in more mature startups with proven traction.",
+    "keywords": ["angel investor", "venture capital", "vc", "difference", "investor types"]
+  },
+  {
+    "id": 6,
+    "question": "How much equity should I give to investors?",
+    "answer": "Typically, seed-stage startups give 10-25% equity to investors. The exact amount depends on: your valuation, funding amount needed, investor value-add, and negotiation. Avoid giving away more than 20% in early rounds to maintain control and leave room for future funding.",
+    "keywords": ["equity", "percentage", "shares", "give away", "ownership"]
+  },
+  {
+    "id": 7,
+    "question": "What is a business model?",
+    "answer": "A business model describes how your company creates, delivers, and captures value. It explains: who your customers are, what problem you solve, how you make money, your revenue streams, cost structure, and key resources. Common models include subscription, marketplace, freemium, and e-commerce.",
+    "keywords": ["business model", "revenue", "monetization", "make money"]
+  },
+  {
+    "id": 8,
+    "question": "What is market validation?",
+    "answer": "Market validation is the process of testing whether customers actually want your product before fully building it. Methods include: customer interviews, surveys, landing page tests, pre-orders, MVP (Minimum Viable Product) launches, and analyzing competitor success.",
+    "keywords": ["market validation", "customer validation", "mvp", "testing", "product market fit"]
+  },
+  {
+    "id": 9,
+    "question": "What is a Minimum Viable Product (MVP)?",
+    "answer": "An MVP is the simplest version of your product with just enough features to satisfy early customers and gather feedback. It helps you test your idea quickly and cheaply before investing heavily in full development. Focus on core functionality that solves the main problem.",
+    "keywords": ["mvp", "minimum viable product", "prototype", "early version"]
+  },
+  {
+    "id": 10,
+    "question": "How do I calculate my startup valuation?",
+    "answer": "Common valuation methods: 1) Comparable company analysis (compare to similar startups), 2) Scorecard method (adjust based on team, market, product), 3) Berkus method (assign value to key success factors), 4) Revenue multiples (for revenue-generating startups). Pre-revenue startups typically valued at $1M-$5M.",
+    "keywords": ["valuation", "company value", "worth", "calculate value"]
+  },
+  {
+    "id": 11,
+    "question": "What is bootstrapping?",
+    "answer": "Bootstrapping means building your business using personal savings, revenue from customers, and minimal external funding. Benefits: you retain full ownership and control. Challenges: slower growth and limited resources. Good for businesses with low initial costs and quick revenue generation.",
+    "keywords": ["bootstrapping", "self-funded", "no investors", "own money"]
+  },
+  {
+    "id": 12,
+    "question": "What is a cap table?",
+    "answer": "A capitalization table (cap table) is a spreadsheet showing who owns what percentage of your company. It lists all shareholders, their equity stakes, and how ownership changes with new funding rounds. Essential for tracking dilution and managing investor relationships.",
+    "keywords": ["cap table", "capitalization", "ownership", "equity distribution"]
+  },
+  {
+    "id": 13,
+    "question": "What is due diligence?",
+    "answer": "Due diligence is the investigation process investors conduct before investing. They examine: financials, legal documents, contracts, intellectual property, team backgrounds, market research, and business operations. Be prepared with organized documentation and transparent communication.",
+    "keywords": ["due diligence", "investigation", "investor review", "verification"]
+  },
+  {
+    "id": 14,
+    "question": "What is a term sheet?",
+    "answer": "A term sheet is a non-binding document outlining the key terms of an investment deal, including: valuation, investment amount, equity percentage, board seats, voting rights, liquidation preferences, and anti-dilution provisions. It's negotiated before final legal agreements.",
+    "keywords": ["term sheet", "investment terms", "deal terms", "agreement"]
+  },
+  {
+    "id": 15,
+    "question": "How do I protect my business idea?",
+    "answer": "Protection methods: 1) Non-Disclosure Agreements (NDAs) with partners/employees, 2) Trademark your brand name and logo, 3) Patent innovative technology, 4) Copyright creative content, 5) Keep trade secrets confidential. However, execution matters more than the idea itself.",
+    "keywords": ["protect idea", "nda", "patent", "trademark", "intellectual property"]
+  },
+  {
+    "id": 16,
+    "question": "What is customer acquisition cost (CAC)?",
+    "answer": "CAC is the total cost of acquiring a new customer, including marketing, sales, and advertising expenses divided by the number of customers acquired. Formula: CAC = Total Marketing & Sales Costs / Number of New Customers. Lower CAC means more efficient growth.",
+    "keywords": ["cac", "customer acquisition", "cost per customer", "marketing cost"]
+  },
+  {
+    "id": 17,
+    "question": "What is a runway?",
+    "answer": "Runway is how long your startup can operate before running out of money. Formula: Runway = Current Cash / Monthly Burn Rate. For example, with ₹10 lakhs and ₹1 lakh monthly burn, you have 10 months runway. Always raise funds before your runway ends.",
+    "keywords": ["runway", "burn rate", "cash", "how long", "money last"]
+  },
+  {
+    "id": 18,
+    "question": "What is product-market fit?",
+    "answer": "Product-market fit means your product satisfies a strong market demand. Signs include: customers actively seeking your product, high retention rates, organic growth through word-of-mouth, and customers would be very disappointed if your product disappeared. It's essential before scaling.",
+    "keywords": ["product market fit", "pmf", "market demand", "customer satisfaction"]
+  },
+  {
+    "id": 19,
+    "question": "What is a pivot?",
+    "answer": "A pivot is a strategic change in your business model, product, or target market based on learnings and feedback. Common pivots: changing customer segment, adjusting features, new revenue model, or different problem to solve. Successful startups often pivot multiple times before finding success.",
+    "keywords": ["pivot", "change direction", "business change", "strategy shift"]
+  },
+  {
+    "id": 20,
+    "question": "How do I scale my business?",
+    "answer": "Scaling strategies: 1) Automate repetitive processes, 2) Build a strong team and delegate, 3) Expand to new markets or customer segments, 4) Improve unit economics (increase revenue per customer), 5) Raise capital for growth, 6) Develop partnerships and distribution channels. Scale only after achieving product-market fit.",
+    "keywords": ["scale", "grow", "expansion", "scaling business", "growth"]
+  }
+]
