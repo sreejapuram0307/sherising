@@ -20,6 +20,7 @@ import InvestorProfile from './pages/investor/InvestorProfile'
 import InvestorSmartMatches from './pages/investor/SmartMatches'
 import MentorDashboard from './pages/MentorDashboard'
 import AccessDenied from './pages/AccessDenied'
+import Leaderboard from './pages/Leaderboard'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -62,6 +63,7 @@ function App() {
         <Route path="government-schemes" element={<EntrepreneurGovernmentSchemes />} />
         <Route path="ngo-connect" element={<EntrepreneurNGOConnect />} />
         <Route path="smart-matches" element={<EntrepreneurSmartMatches />} />
+        <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="profile" element={<EntrepreneurProfile />} />
       </Route>
       
@@ -74,12 +76,19 @@ function App() {
         <Route path="my-investments" element={<MyInvestments />} />
         <Route path="chat" element={<InvestorChat />} />
         <Route path="smart-matches" element={<InvestorSmartMatches />} />
+        <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="profile" element={<InvestorProfile />} />
       </Route>
       
       <Route path="/mentor-dashboard" element={
         <ProtectedRoute allowedRole="Mentor">
           <MentorDashboard />
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/leaderboard" element={
+        <ProtectedRoute>
+          <Leaderboard />
         </ProtectedRoute>
       } />
     </Routes>

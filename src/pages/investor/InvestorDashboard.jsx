@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import InvestModal from '../../components/InvestModal'
 import IdeaChatModal from '../../components/IdeaChatModal'
-import { ideaAPI, investorAPI } from '../../utils/api'
+import BadgeDisplay from '../../components/BadgeDisplay'
+import { ideaAPI, investorAPI, profileAPI } from '../../utils/api'
 
 const InvestorDashboard = () => {
   const [ideas, setIdeas] = useState([])
@@ -15,6 +16,8 @@ const InvestorDashboard = () => {
   const [showChatModal, setShowChatModal] = useState(false)
   const [chatIdea, setChatIdea] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [likedIdeas, setLikedIdeas] = useState([])
+  const [entrepreneurBadges, setEntrepreneurBadges] = useState({})
 
   useEffect(() => {
     loadData()
@@ -22,17 +25,40 @@ const InvestorDashboard = () => {
 
   const loadData = async () => {
     try {
-      const [ideasResult, statsResult] = await Promise.all([
+      const [ideasResult, statsResult, profileResult] = await Promise.all([
         ideaAPI.getAll(),
-        investorAPI.getDashboard()
+        investorAPI.getDashboard(),
+        profileAPI.getProfile()
       ])
 
       if (ideasResult.success) {
         setIdeas(ideasResult.data)
+        
+        // Fetch entrepreneur badges for all ideas
+        const badges = {}
+        for (const idea of ideasResult.data) {
+          try {
+            const entrepreneurProfile = await profileAPI.getProfileById(idea.entrepreneurId)
+            if (entrepreneurProfile.success) {
+              badges[idea.entrepreneurId] = {
+                badgeTitle: entrepreneurProfile.data.badgeTitle,
+                badgeLevel: entrepreneurProfile.data.badgeLevel
+              }
+            }
+          } catch (error) {
+            console.error('Error fetching entrepreneur badge:', error)
+          }
+        }
+        setEntrepreneurBadges(badges)
       }
 
       if (statsResult.success) {
         setStats(statsResult.data)
+      }
+
+      if (profileResult.success) {
+        // Convert likedIdeas to strings for proper comparison
+        setLikedIdeas((profileResult.data.likedIdeas || []).map(id => id.toString()))
       }
     } catch (error) {
       console.error('Error loading data:', error)
@@ -75,9 +101,13 @@ const InvestorDashboard = () => {
         setIdeas(ideas.map(idea =>
           idea._id === ideaId ? result.data : idea
         ))
+        setLikedIdeas([...likedIdeas, ideaId])
+      } else {
+        alert(result.message || 'Failed to like idea')
       }
     } catch (error) {
       console.error('Like error:', error)
+      alert('You may have already liked this idea')
     }
   }
 
@@ -139,7 +169,11 @@ const InvestorDashboard = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {ideas.map(idea => (
+          {ideas.map(idea => {
+            const isLiked = likedIdeas.includes(idea._id.toString())
+            const entrepreneurBadge = entrepreneurBadges[idea.entrepreneurId]
+            
+            return (
             <div key={idea._id} className="bg-white rounded-2xl shadow-lg p-6 border border-purple-100 hover:shadow-xl transition-all">
               <div className="flex justify-between items-start mb-3">
                 <h4 className="text-xl font-bold text-gray-800">{idea.title}</h4>
@@ -169,14 +203,29 @@ const InvestorDashboard = () => {
 
               <div className="border-t border-gray-200 pt-4 mb-4">
                 <p className="text-sm text-gray-600">Entrepreneur</p>
-                <p className="font-semibold text-gray-800">{idea.entrepreneurName}</p>
-                <p className="text-sm text-purple-600">{idea.entrepreneurEmail}</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-semibold text-gray-800">{idea.entrepreneurName}</p>
+                    <p className="text-sm text-purple-600">{idea.entrepreneurEmail}</p>
+                  </div>
+                  {entrepreneurBadge && (
+                    <BadgeDisplay 
+                      badgeTitle={entrepreneurBadge.badgeTitle} 
+                      badgeLevel={entrepreneurBadge.badgeLevel}
+                    />
+                  )}
+                </div>
               </div>
 
               <div className="flex gap-2">
                 <button
                   onClick={() => handleLike(idea._id)}
-                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-pink-50 text-gray-700 transition-all"
+                  disabled={isLiked}
+                  className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl transition-all ${
+                    isLiked 
+                      ? 'bg-pink-100 text-pink-700 cursor-not-allowed' 
+                      : 'bg-gray-100 hover:bg-pink-50 text-gray-700'
+                  }`}
                 >
                   ❤️ {idea.likes}
                 </button>
@@ -194,7 +243,7 @@ const InvestorDashboard = () => {
                 </button>
               </div>
             </div>
-          ))}
+          )})}
         </div>
       )}
 

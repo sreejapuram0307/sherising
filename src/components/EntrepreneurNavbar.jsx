@@ -1,10 +1,31 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import BadgeDisplay from './BadgeDisplay'
+import { profileAPI } from '../utils/api'
 
 const EntrepreneurNavbar = ({ toggleSidebar }) => {
   const [showDropdown, setShowDropdown] = useState(false)
+  const [badge, setBadge] = useState(null)
   const navigate = useNavigate()
   const name = localStorage.getItem('name') || 'Entrepreneur'
+
+  useEffect(() => {
+    loadBadge()
+  }, [])
+
+  const loadBadge = async () => {
+    try {
+      const result = await profileAPI.getProfile()
+      if (result.success) {
+        setBadge({
+          badgeTitle: result.data.badgeTitle,
+          badgeLevel: result.data.badgeLevel
+        })
+      }
+    } catch (error) {
+      console.error('Error loading badge:', error)
+    }
+  }
 
   const handleSignOut = () => {
     localStorage.clear()
@@ -37,7 +58,16 @@ const EntrepreneurNavbar = ({ toggleSidebar }) => {
               {name.charAt(0).toUpperCase()}
             </div>
             <div className="text-left">
-              <p className="text-sm font-semibold text-gray-800">{name}</p>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold text-gray-800">{name}</p>
+                {badge && (
+                  <BadgeDisplay 
+                    badgeTitle={badge.badgeTitle} 
+                    badgeLevel={badge.badgeLevel}
+                    size="small"
+                  />
+                )}
+              </div>
               <p className="text-xs text-gray-600">Entrepreneur</p>
             </div>
             <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">

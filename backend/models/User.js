@@ -27,7 +27,36 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Location is required'],
     trim: true
-  }
+  },
+  badgeTitle: {
+    type: String,
+    default: 'Newcomer'
+  },
+  badgeLevel: {
+    type: String,
+    enum: ['Bronze', 'Silver', 'Gold', 'Platinum'],
+    default: 'Bronze'
+  },
+  totalLikesReceived: {
+    type: Number,
+    default: 0
+  },
+  totalInvestmentsMade: {
+    type: Number,
+    default: 0
+  },
+  totalFundingAmount: {
+    type: Number,
+    default: 0
+  },
+  points: {
+    type: Number,
+    default: 0
+  },
+  likedIdeas: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Idea'
+  }]
 }, {
   timestamps: true
 })

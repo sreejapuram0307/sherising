@@ -10,6 +10,7 @@ const EntrepreneurSidebar = ({ isOpen }) => {
     { path: '/entrepreneur-dashboard/government-schemes', label: 'Government Schemes', icon: '🏛️' },
     { path: '/entrepreneur-dashboard/ngo-connect', label: 'NGO Connect', icon: '🤝' },
     { path: '/entrepreneur-dashboard/smart-matches', label: 'Smart Matches', icon: '🎯' },
+    { path: '/entrepreneur-dashboard/leaderboard', label: 'Leaderboard', icon: '🏆' },
   ]
 
   return (

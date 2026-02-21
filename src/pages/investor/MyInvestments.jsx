@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { investorAPI } from '../../utils/api'
 import IdeaChatModal from '../../components/IdeaChatModal'
+import BadgeProgress from '../../components/BadgeProgress'
 
 const MyInvestments = () => {
   const [investments, setInvestments] = useState([])
@@ -49,6 +50,8 @@ const MyInvestments = () => {
   return (
     <div className="max-w-6xl mx-auto">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">My Investments</h2>
+      
+      <BadgeProgress />
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {investments.map((investment) => (

@@ -111,6 +111,20 @@ export const chatAPI = {
 }
 
 export const profileAPI = {
+  getProfile: async () => {
+    const response = await fetch(`${API_URL}/profile`, {
+      headers: getAuthHeader()
+    })
+    return response.json()
+  },
+
+  getProfileById: async (userId) => {
+    const response = await fetch(`${API_URL}/profile/${userId}`, {
+      headers: getAuthHeader()
+    })
+    return response.json()
+  },
+
   get: async () => {
     const response = await fetch(`${API_URL}/profile`, {
       headers: getAuthHeader()
@@ -177,6 +191,22 @@ export const matchAPI = {
 
   getInvestorMatches: async () => {
     const response = await fetch(`${API_URL}/matches/investor`, {
+      headers: getAuthHeader()
+    })
+    return response.json()
+  }
+}
+
+export const gamificationAPI = {
+  getLeaderboard: async () => {
+    const response = await fetch(`${API_URL}/gamification/leaderboard`, {
+      headers: getAuthHeader()
+    })
+    return response.json()
+  },
+
+  getBadgeProgress: async () => {
+    const response = await fetch(`${API_URL}/gamification/badge-progress`, {
       headers: getAuthHeader()
     })
     return response.json()

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ideaAPI } from '../../utils/api'
 import IdeaChatModal from '../../components/IdeaChatModal'
+import BadgeProgress from '../../components/BadgeProgress'
 
 const MyIdeas = () => {
   const [ideas, setIdeas] = useState([])
@@ -50,6 +51,8 @@ const MyIdeas = () => {
   return (
     <div className="max-w-6xl mx-auto">
       <h2 className="text-3xl font-bold text-gray-800 mb-6">My Ideas</h2>
+      
+      <BadgeProgress />
       
       <div className="space-y-4">
         {ideas.map(idea => (
