@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { ideaAPI } from '../../utils/api'
 
 const Dashboard = () => {
+  const { t } = useTranslation()
   const [isListening, setIsListening] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -15,12 +17,21 @@ const Dashboard = () => {
   const navigate = useNavigate()
 
   const languages = [
-    { code: 'en-IN', label: 'English' },
-    { code: 'hi-IN', label: 'Hindi' },
-    { code: 'te-IN', label: 'Telugu' }
+    { code: 'en-IN', label: t('entrepreneurDashboard.english') },
+    { code: 'hi-IN', label: t('entrepreneurDashboard.hindi') },
+    { code: 'te-IN', label: t('entrepreneurDashboard.telugu') }
   ]
 
-  const categories = ['Beauty', 'Books', 'Tech', 'Handmade', 'Fashion', 'Food', 'Healthcare', 'Education']
+  const categories = [
+    t('entrepreneurDashboard.beauty'),
+    t('entrepreneurDashboard.books'),
+    t('entrepreneurDashboard.tech'),
+    t('entrepreneurDashboard.handmade'),
+    t('entrepreneurDashboard.fashion'),
+    t('entrepreneurDashboard.food'),
+    t('entrepreneurDashboard.healthcare'),
+    t('entrepreneurDashboard.education')
+  ]
 
   const startVoiceRecording = () => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
@@ -61,7 +72,7 @@ const Dashboard = () => {
     setError('')
     
     if (!title || !description || !category || !fundingGoal || !location) {
-      setError('Please fill all fields including location')
+      setError(t('entrepreneurDashboard.fillAllFields'))
       return
     }
 
@@ -97,8 +108,8 @@ const Dashboard = () => {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="backdrop-blur-xl bg-white/60 border border-white/40 shadow-2xl rounded-3xl p-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-2">Share Your Business Idea</h2>
-        <p className="text-gray-600 mb-6">Use voice or type your vision</p>
+        <h2 className="text-3xl font-bold text-gray-800 mb-2">{t('entrepreneurDashboard.shareYourIdea')}</h2>
+        <p className="text-gray-600 mb-6">{t('entrepreneurDashboard.useVoiceOrType')}</p>
 
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-xl text-sm">
@@ -108,18 +119,18 @@ const Dashboard = () => {
 
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Idea Title</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">{t('entrepreneurDashboard.ideaTitle')}</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Enter your business idea title"
+              placeholder={t('entrepreneurDashboard.enterIdeaTitle')}
               className="w-full rounded-2xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none px-4 py-3 bg-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Language</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">{t('entrepreneurDashboard.language')}</label>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
@@ -133,13 +144,13 @@ const Dashboard = () => {
 
           <div>
             <div className="flex justify-between items-center mb-2">
-              <label className="text-sm font-semibold text-gray-700">Description</label>
+              <label className="text-sm font-semibold text-gray-700">{t('entrepreneurDashboard.description')}</label>
               <span className="text-xs text-gray-500">{description.length}/500</span>
             </div>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value.slice(0, 500))}
-              placeholder="Describe your business idea..."
+              placeholder={t('entrepreneurDashboard.describeYourIdea')}
               rows="6"
               className="w-full rounded-2xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none px-4 py-3 resize-none bg-white"
             />
@@ -152,19 +163,19 @@ const Dashboard = () => {
                   : 'bg-gradient-to-r from-orange-400 to-pink-400 text-white hover:scale-105'
               }`}
             >
-              {isListening ? '🎤 Listening...' : '🎤 Start Voice Input'}
+              {isListening ? t('entrepreneurDashboard.listening') : t('entrepreneurDashboard.startVoiceInput')}
             </button>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Category</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">{t('entrepreneurDashboard.category')}</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full rounded-2xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none px-4 py-3 bg-white"
               >
-                <option value="">Select category</option>
+                <option value="">{t('entrepreneurDashboard.selectCategory')}</option>
                 {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
@@ -172,7 +183,7 @@ const Dashboard = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Funding Goal (₹)</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">{t('entrepreneurDashboard.fundingGoal')}</label>
               <input
                 type="number"
                 value={fundingGoal}
@@ -184,12 +195,12 @@ const Dashboard = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Location (City)</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">{t('entrepreneurDashboard.location')}</label>
             <input
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="e.g., Hyderabad, Mumbai, Bangalore"
+              placeholder={t('entrepreneurDashboard.locationPlaceholder')}
               className="w-full rounded-2xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none px-4 py-3 bg-white"
             />
           </div>
@@ -199,7 +210,7 @@ const Dashboard = () => {
             disabled={loading}
             className="w-full bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-2xl py-3 font-semibold hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Posting...' : 'Post Idea ✨'}
+            {loading ? t('entrepreneurDashboard.posting') : t('entrepreneurDashboard.postIdea')}
           </button>
         </div>
       </div>

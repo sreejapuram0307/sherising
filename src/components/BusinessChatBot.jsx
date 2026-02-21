@@ -1,19 +1,26 @@
 import { useState, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { chatBotAPI } from '../utils/api'
 
 const BusinessChatBot = () => {
-  const [messages, setMessages] = useState([
-    {
-      type: 'bot',
-      text: '👋 Hello! I\'m your Business AI Assistant. I can help you with questions about startups, funding, investors, business models, and more. Ask me anything!',
-      timestamp: new Date()
-    }
-  ])
+  const { t } = useTranslation()
+  const [messages, setMessages] = useState([])
   const [inputMessage, setInputMessage] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [suggestions, setSuggestions] = useState([])
   const [showSuggestions, setShowSuggestions] = useState(true)
   const messagesEndRef = useRef(null)
+
+  useEffect(() => {
+    // Initialize with welcome message
+    setMessages([
+      {
+        type: 'bot',
+        text: `👋 ${t('businessAI.welcome')}`,
+        timestamp: new Date()
+      }
+    ])
+  }, [t])
 
   useEffect(() => {
     loadSuggestions()
@@ -101,8 +108,8 @@ const BusinessChatBot = () => {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
-        <h2 className="text-3xl font-bold text-gray-800 mb-2">🤖 Business AI Assistant</h2>
-        <p className="text-gray-600">Get instant answers to your entrepreneurship and investment questions</p>
+        <h2 className="text-3xl font-bold text-gray-800 mb-2">🤖 {t('businessAI.title')}</h2>
+        <p className="text-gray-600">{t('businessAI.subtitle')}</p>
       </div>
 
       <div className="bg-white rounded-2xl shadow-lg border border-purple-100 flex flex-col h-[600px]">
@@ -119,7 +126,7 @@ const BusinessChatBot = () => {
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white text-sm font-semibold">
                       🤖
                     </div>
-                    <span className="text-xs font-semibold text-gray-700">AI Assistant</span>
+                    <span className="text-xs font-semibold text-gray-700">{t('businessAI.aiAssistant')}</span>
                   </div>
                 )}
                 <div
@@ -145,7 +152,7 @@ const BusinessChatBot = () => {
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center text-white text-sm font-semibold">
                     🤖
                   </div>
-                  <span className="text-xs font-semibold text-gray-700">AI Assistant</span>
+                  <span className="text-xs font-semibold text-gray-700">{t('businessAI.aiAssistant')}</span>
                 </div>
                 <div className="px-4 py-3 rounded-2xl bg-gray-100">
                   <div className="flex gap-1">
@@ -164,7 +171,7 @@ const BusinessChatBot = () => {
         {/* Suggestions */}
         {showSuggestions && suggestions.length > 0 && (
           <div className="border-t border-gray-200 p-4 bg-purple-50">
-            <p className="text-xs font-semibold text-gray-600 mb-2">💡 Suggested Questions:</p>
+            <p className="text-xs font-semibold text-gray-600 mb-2">💡 {t('businessAI.suggestedQuestions')}</p>
             <div className="flex flex-wrap gap-2">
               {suggestions.map((suggestion, idx) => (
                 <button
@@ -187,7 +194,7 @@ const BusinessChatBot = () => {
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask me anything about business, startups, or funding..."
+              placeholder={t('businessAI.askAnything')}
               className="flex-1 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none px-4 py-3"
               disabled={isTyping}
             />
@@ -196,11 +203,11 @@ const BusinessChatBot = () => {
               disabled={isTyping || !inputMessage.trim()}
               className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:shadow-lg hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              Send
+              {t('common.send')}
             </button>
           </div>
           <p className="text-xs text-gray-500 mt-2">
-            💡 Tip: Press Enter to send your message
+            💡 {t('businessAI.tipPressEnter')}
           </p>
         </div>
       </div>

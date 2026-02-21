@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import InvestModal from '../../components/InvestModal'
 import IdeaChatModal from '../../components/IdeaChatModal'
 import BadgeDisplay from '../../components/BadgeDisplay'
 import { ideaAPI, investorAPI, profileAPI } from '../../utils/api'
 
 const InvestorDashboard = () => {
+  const { t } = useTranslation()
   const [ideas, setIdeas] = useState([])
   const [stats, setStats] = useState({
     totalIdeasInvested: 0,
@@ -114,20 +116,20 @@ const InvestorDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-xl text-gray-600">Loading...</div>
+        <div className="text-xl text-gray-600">{t('common.loading')}</div>
       </div>
     )
   }
 
   return (
     <div className="max-w-7xl mx-auto">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">{t('nav.dashboard')}</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-purple-100 hover:shadow-xl transition-all">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Total Ideas Invested</p>
+              <p className="text-gray-600 text-sm font-medium">{t('investorDashboard.totalIdeasInvested')}</p>
               <p className="text-3xl font-bold text-purple-600 mt-2">{stats.totalIdeasInvested}</p>
             </div>
             <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
@@ -139,7 +141,7 @@ const InvestorDashboard = () => {
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-purple-100 hover:shadow-xl transition-all">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Total Amount Invested</p>
+              <p className="text-gray-600 text-sm font-medium">{t('investorDashboard.totalAmountInvested')}</p>
               <p className="text-3xl font-bold text-green-600 mt-2">₹{stats.totalAmountInvested.toLocaleString()}</p>
             </div>
             <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
@@ -151,7 +153,7 @@ const InvestorDashboard = () => {
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-purple-100 hover:shadow-xl transition-all">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Active Investments</p>
+              <p className="text-gray-600 text-sm font-medium">{t('investorDashboard.activeInvestments')}</p>
               <p className="text-3xl font-bold text-blue-600 mt-2">{stats.activeInvestments}</p>
             </div>
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -161,11 +163,11 @@ const InvestorDashboard = () => {
         </div>
       </div>
 
-      <h3 className="text-2xl font-bold text-gray-800 mb-4">Entrepreneur Ideas</h3>
+      <h3 className="text-2xl font-bold text-gray-800 mb-4">{t('investorDashboard.entrepreneurIdeas')}</h3>
       
       {ideas.length === 0 ? (
         <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
-          <p className="text-gray-600">No ideas available yet</p>
+          <p className="text-gray-600">{t('investorDashboard.noIdeasAvailable')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -186,11 +188,11 @@ const InvestorDashboard = () => {
 
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Funding Goal:</span>
+                  <span className="text-gray-600">{t('investorDashboard.fundingGoal')}</span>
                   <span className="font-semibold text-gray-800">₹{idea.fundingGoal.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Amount Raised:</span>
+                  <span className="text-gray-600">{t('investorDashboard.amountRaised')}</span>
                   <span className="font-semibold text-green-600">₹{idea.amountRaised.toLocaleString()}</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
@@ -202,7 +204,7 @@ const InvestorDashboard = () => {
               </div>
 
               <div className="border-t border-gray-200 pt-4 mb-4">
-                <p className="text-sm text-gray-600">Entrepreneur</p>
+                <p className="text-sm text-gray-600">{t('investorDashboard.entrepreneur')}</p>
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-semibold text-gray-800">{idea.entrepreneurName}</p>
@@ -233,13 +235,13 @@ const InvestorDashboard = () => {
                   onClick={() => handleOpenChat(idea)}
                   className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-blue-100 hover:bg-blue-200 text-blue-700 transition-all"
                 >
-                  💬 Chat
+                  💬 {t('chat.chat')}
                 </button>
                 <button
                   onClick={() => handleInvest(idea)}
                   className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-xl font-semibold hover:shadow-lg hover:scale-105 transition-all"
                 >
-                  💰 Invest
+                  💰 {t('ideas.invest')}
                 </button>
               </div>
             </div>

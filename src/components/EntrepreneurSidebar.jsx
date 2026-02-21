@@ -1,17 +1,20 @@
 import { NavLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const EntrepreneurSidebar = ({ isOpen }) => {
+  const { t } = useTranslation()
+  
   const menuItems = [
-    { path: '/entrepreneur-dashboard', label: 'Dashboard', icon: '📊', end: true },
-    { path: '/entrepreneur-dashboard/my-ideas', label: 'My Ideas', icon: '💡' },
-    { path: '/entrepreneur-dashboard/community', label: 'Community', icon: '👥' },
-    { path: '/entrepreneur-dashboard/chat', label: 'Chat', icon: '💬' },
-    { path: '/entrepreneur-dashboard/business-chat', label: 'Business AI', icon: '🤖' },
-    { path: '/entrepreneur-dashboard/learning-hub', label: 'Learning Hub', icon: '📚' },
-    { path: '/entrepreneur-dashboard/government-schemes', label: 'Government Schemes', icon: '🏛️' },
-    { path: '/entrepreneur-dashboard/ngo-connect', label: 'NGO Connect', icon: '🤝' },
-    { path: '/entrepreneur-dashboard/smart-matches', label: 'Smart Matches', icon: '🎯' },
-    { path: '/entrepreneur-dashboard/leaderboard', label: 'Leaderboard', icon: '🏆' },
+    { path: '/entrepreneur-dashboard', label: t('nav.dashboard'), icon: '📊', end: true },
+    { path: '/entrepreneur-dashboard/my-ideas', label: t('nav.myIdeas'), icon: '💡' },
+    { path: '/entrepreneur-dashboard/community', label: t('nav.community'), icon: '👥' },
+    { path: '/entrepreneur-dashboard/chat', label: t('nav.chat'), icon: '💬' },
+    { path: '/entrepreneur-dashboard/business-chat', label: t('nav.businessAI'), icon: '🤖' },
+    { path: '/entrepreneur-dashboard/learning-hub', label: t('nav.learningHub'), icon: '📚' },
+    { path: '/entrepreneur-dashboard/government-schemes', label: t('nav.governmentSchemes'), icon: '🏛️' },
+    { path: '/entrepreneur-dashboard/ngo-connect', label: t('nav.ngoConnect'), icon: '🤝' },
+    { path: '/entrepreneur-dashboard/smart-matches', label: t('nav.smartMatches'), icon: '🎯' },
+    { path: '/entrepreneur-dashboard/leaderboard', label: t('nav.leaderboard'), icon: '🏆' },
   ]
 
   return (

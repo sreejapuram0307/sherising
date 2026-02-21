@@ -1,13 +1,16 @@
 import { NavLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const InvestorSidebar = ({ isOpen }) => {
+  const { t } = useTranslation()
+  
   const menuItems = [
-    { path: '/investor-dashboard', label: 'Dashboard', icon: '📊', end: true },
-    { path: '/investor-dashboard/my-investments', label: 'My Investments', icon: '💰' },
-    { path: '/investor-dashboard/chat', label: 'Chat', icon: '💬' },
-    { path: '/investor-dashboard/business-chat', label: 'Business AI', icon: '🤖' },
-    { path: '/investor-dashboard/smart-matches', label: 'Smart Matches', icon: '🎯' },
-    { path: '/investor-dashboard/leaderboard', label: 'Leaderboard', icon: '🏆' },
+    { path: '/investor-dashboard', label: t('nav.dashboard'), icon: '📊', end: true },
+    { path: '/investor-dashboard/my-investments', label: t('nav.myInvestments'), icon: '💰' },
+    { path: '/investor-dashboard/chat', label: t('nav.chat'), icon: '💬' },
+    { path: '/investor-dashboard/business-chat', label: t('nav.businessAI'), icon: '🤖' },
+    { path: '/investor-dashboard/smart-matches', label: t('nav.smartMatches'), icon: '🎯' },
+    { path: '/investor-dashboard/leaderboard', label: t('nav.leaderboard'), icon: '🏆' },
   ]
 
   return (
