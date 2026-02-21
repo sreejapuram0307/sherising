@@ -1,14 +1,36 @@
 import { useState, useEffect } from 'react'
+import { ideaAPI } from '../../utils/api'
 
 const MyIdeas = () => {
   const [ideas, setIdeas] = useState([])
-  const userName = localStorage.getItem('name')
+  const [loading, setLoading] = useState(true)
+  const userId = localStorage.getItem('userId')
 
   useEffect(() => {
-    const allIdeas = JSON.parse(localStorage.getItem('sherise_all_ideas') || '[]')
-    const myIdeas = allIdeas.filter(idea => idea.author === userName)
-    setIdeas(myIdeas)
-  }, [userName])
+    loadIdeas()
+  }, [])
+
+  const loadIdeas = async () => {
+    try {
+      const result = await ideaAPI.getAll()
+      if (result.success) {
+        const myIdeas = result.data.filter(idea => idea.entrepreneurId === userId)
+        setIdeas(myIdeas)
+      }
+    } catch (error) {
+      console.error('Error loading ideas:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-xl text-gray-600">Loading...</div>
+      </div>
+    )
+  }
 
   if (ideas.length === 0) {
     return (
@@ -28,31 +50,38 @@ const MyIdeas = () => {
       
       <div className="space-y-4">
         {ideas.map(idea => (
-          <div key={idea.id} className="backdrop-blur-xl bg-white/60 border border-white/40 shadow-2xl rounded-3xl p-6">
+          <div key={idea._id} className="backdrop-blur-xl bg-white/60 border border-white/40 shadow-2xl rounded-3xl p-6">
             <div className="flex justify-between items-start mb-3">
               <div>
-                <h3 className="font-semibold text-gray-800 text-lg">{idea.author}</h3>
-                <p className="text-xs text-gray-500">{idea.date}</p>
+                <h3 className="font-semibold text-gray-800 text-lg">{idea.title}</h3>
+                <p className="text-xs text-gray-500">{new Date(idea.createdAt).toLocaleDateString()}</p>
               </div>
               <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-200 text-purple-800">
-                {idea.language}
+                {idea.category}
               </span>
             </div>
             
-            <p className="text-gray-700 mb-3">{idea.text}</p>
+            <p className="text-gray-700 mb-3">{idea.description}</p>
             
-            <div className="flex flex-wrap gap-2 mb-3">
-              <span className="px-3 py-1 rounded-full text-xs bg-pink-200 text-pink-800 font-medium">
-                {idea.category}
-              </span>
-              <span className="px-3 py-1 rounded-full text-xs bg-green-200 text-green-800 font-medium">
-                {idea.funding}
-              </span>
+            <div className="space-y-2 mb-3">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Funding Goal:</span>
+                <span className="font-semibold text-gray-800">₹{idea.fundingGoal.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Amount Raised:</span>
+                <span className="font-semibold text-green-600">₹{idea.amountRaised.toLocaleString()}</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-gradient-to-r from-orange-400 to-pink-400 h-2 rounded-full"
+                  style={{ width: `${Math.min((idea.amountRaised / idea.fundingGoal) * 100, 100)}%` }}
+                ></div>
+              </div>
             </div>
             
             <div className="flex gap-4 text-sm text-gray-600">
               <span>❤️ {idea.likes} likes</span>
-              <span>💬 {idea.comments.length} comments</span>
             </div>
           </div>
         ))}

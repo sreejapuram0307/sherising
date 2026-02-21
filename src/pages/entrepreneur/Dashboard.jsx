@@ -1,15 +1,17 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ideaAPI } from '../../utils/api'
 
 const Dashboard = () => {
   const [isListening, setIsListening] = useState(false)
-  const [text, setText] = useState('')
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const [language, setLanguage] = useState('en-IN')
   const [category, setCategory] = useState('')
-  const [funding, setFunding] = useState('')
-  const [visibility, setVisibility] = useState('public')
+  const [fundingGoal, setFundingGoal] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
-  const userName = localStorage.getItem('name') || 'Demo User'
 
   const languages = [
     { code: 'en-IN', label: 'English' },
@@ -43,7 +45,7 @@ const Dashboard = () => {
         }
       }
       if (transcript) {
-        setText(prev => (prev + ' ' + transcript).trim().slice(0, 300))
+        setDescription(prev => (prev + ' ' + transcript).trim().slice(0, 500))
       }
     }
 
@@ -54,36 +56,39 @@ const Dashboard = () => {
     }, 10000)
   }
 
-  const handlePostIdea = () => {
-    if (!text || !category || !funding) {
-      alert('Please fill all fields')
+  const handlePostIdea = async () => {
+    setError('')
+    
+    if (!title || !description || !category || !fundingGoal) {
+      setError('Please fill all fields')
       return
     }
 
-    const ideas = JSON.parse(localStorage.getItem('sherise_all_ideas') || '[]')
-    
-    const newIdea = {
-      id: Date.now(),
-      author: userName,
-      role: 'entrepreneur',
-      text,
-      language: languages.find(l => l.code === language)?.label || 'English',
-      funding,
-      category,
-      visibility,
-      likes: 0,
-      comments: [],
-      date: new Date().toLocaleDateString()
-    }
+    setLoading(true)
 
-    ideas.push(newIdea)
-    localStorage.setItem('sherise_all_ideas', JSON.stringify(ideas))
-    
-    setText('')
-    setCategory('')
-    setFunding('')
-    
-    navigate('/entrepreneur-dashboard/my-ideas')
+    try {
+      const result = await ideaAPI.create({
+        title,
+        description,
+        category,
+        fundingGoal: parseFloat(fundingGoal)
+      })
+
+      if (result.success) {
+        setTitle('')
+        setDescription('')
+        setCategory('')
+        setFundingGoal('')
+        navigate('/entrepreneur-dashboard/my-ideas')
+      } else {
+        setError(result.message || 'Failed to post idea')
+      }
+    } catch (err) {
+      setError('Server error. Please try again.')
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -92,7 +97,24 @@ const Dashboard = () => {
         <h2 className="text-3xl font-bold text-gray-800 mb-2">Share Your Business Idea</h2>
         <p className="text-gray-600 mb-6">Use voice or type your vision</p>
 
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-xl text-sm">
+            {error}
+          </div>
+        )}
+
         <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Idea Title</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter your business idea title"
+              className="w-full rounded-2xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none px-4 py-3 bg-white"
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Language</label>
             <select
@@ -108,12 +130,12 @@ const Dashboard = () => {
 
           <div>
             <div className="flex justify-between items-center mb-2">
-              <label className="text-sm font-semibold text-gray-700">Your Idea</label>
-              <span className="text-xs text-gray-500">{text.length}/300</span>
+              <label className="text-sm font-semibold text-gray-700">Description</label>
+              <span className="text-xs text-gray-500">{description.length}/500</span>
             </div>
             <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value.slice(0, 300))}
+              value={description}
+              onChange={(e) => setDescription(e.target.value.slice(0, 500))}
               placeholder="Describe your business idea..."
               rows="6"
               className="w-full rounded-2xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none px-4 py-3 resize-none bg-white"
@@ -147,48 +169,23 @@ const Dashboard = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Funding Goal</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Funding Goal (₹)</label>
               <input
-                type="text"
-                value={funding}
-                onChange={(e) => setFunding(e.target.value)}
-                placeholder="₹ 5,00,000"
+                type="number"
+                value={fundingGoal}
+                onChange={(e) => setFundingGoal(e.target.value)}
+                placeholder="500000"
                 className="w-full rounded-2xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none px-4 py-3 bg-white"
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-3">Visibility</label>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  value="public"
-                  checked={visibility === 'public'}
-                  onChange={(e) => setVisibility(e.target.value)}
-                  className="w-4 h-4"
-                />
-                <span className="text-sm text-gray-700 font-medium">Public</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="radio"
-                  value="private"
-                  checked={visibility === 'private'}
-                  onChange={(e) => setVisibility(e.target.value)}
-                  className="w-4 h-4"
-                />
-                <span className="text-sm text-gray-700 font-medium">Private</span>
-              </label>
-            </div>
-          </div>
-
           <button
             onClick={handlePostIdea}
-            className="w-full bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-2xl py-3 font-semibold hover:scale-105 transition-all"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-orange-400 to-pink-400 text-white rounded-2xl py-3 font-semibold hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Post Idea ✨
+            {loading ? 'Posting...' : 'Post Idea ✨'}
           </button>
         </div>
       </div>

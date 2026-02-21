@@ -1,12 +1,34 @@
 import { useState, useEffect } from 'react'
+import { investorAPI } from '../../utils/api'
 
 const MyInvestments = () => {
   const [investments, setInvestments] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const storedInvestments = JSON.parse(localStorage.getItem('investments') || '[]')
-    setInvestments(storedInvestments)
+    loadInvestments()
   }, [])
+
+  const loadInvestments = async () => {
+    try {
+      const result = await investorAPI.getMyInvestments()
+      if (result.success) {
+        setInvestments(result.data)
+      }
+    } catch (error) {
+      console.error('Error loading investments:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-xl text-gray-600">Loading...</div>
+      </div>
+    )
+  }
 
   if (investments.length === 0) {
     return (
@@ -26,8 +48,8 @@ const MyInvestments = () => {
       <h2 className="text-3xl font-bold text-gray-800 mb-6">My Investments</h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {investments.map((investment, idx) => (
-          <div key={idx} className="bg-white rounded-2xl shadow-lg p-6 border border-purple-100 hover:shadow-xl transition-all">
+        {investments.map((investment) => (
+          <div key={investment._id} className="bg-white rounded-2xl shadow-lg p-6 border border-purple-100 hover:shadow-xl transition-all">
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-xl font-bold text-gray-800">{investment.ideaTitle}</h3>
               <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
@@ -58,7 +80,7 @@ const MyInvestments = () => {
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
                   className="bg-gradient-to-r from-purple-600 to-pink-600 h-2 rounded-full"
-                  style={{ width: `${(investment.amountRaised / investment.fundingGoal) * 100}%` }}
+                  style={{ width: `${Math.min((investment.amountRaised / investment.fundingGoal) * 100, 100)}%` }}
                 ></div>
               </div>
             </div>
@@ -66,7 +88,7 @@ const MyInvestments = () => {
             <div className="border-t border-gray-200 pt-4">
               <p className="text-sm text-gray-600 mb-1">Entrepreneur Email</p>
               <p className="font-semibold text-purple-600">{investment.entrepreneurEmail}</p>
-              <p className="text-xs text-gray-500 mt-2">Invested on {investment.date}</p>
+              <p className="text-xs text-gray-500 mt-2">Invested on {new Date(investment.date).toLocaleDateString()}</p>
             </div>
           </div>
         ))}
