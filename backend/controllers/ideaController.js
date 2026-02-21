@@ -20,12 +20,12 @@ export const getAllIdeas = async (req, res) => {
 
 export const createIdea = async (req, res) => {
   try {
-    const { title, category, description, fundingGoal } = req.body
+    const { title, category, description, fundingGoal, location } = req.body
 
-    if (!title || !category || !description || !fundingGoal) {
+    if (!title || !category || !description || !fundingGoal || !location) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide all fields'
+        message: 'Please provide all fields including location'
       })
     }
 
@@ -34,6 +34,7 @@ export const createIdea = async (req, res) => {
       category,
       description,
       fundingGoal,
+      location,
       entrepreneurId: req.user._id,
       entrepreneurName: req.user.name,
       entrepreneurEmail: req.user.email

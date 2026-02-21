@@ -11,11 +11,13 @@ import EntrepreneurLearningHub from './pages/entrepreneur/LearningHub'
 import EntrepreneurGovernmentSchemes from './pages/entrepreneur/GovernmentSchemes'
 import EntrepreneurNGOConnect from './pages/entrepreneur/NGOConnect'
 import EntrepreneurProfile from './pages/entrepreneur/Profile'
+import EntrepreneurSmartMatches from './pages/entrepreneur/SmartMatches'
 import InvestorLayout from './components/InvestorLayout'
 import InvestorDashboard from './pages/investor/InvestorDashboard'
 import MyInvestments from './pages/investor/MyInvestments'
 import InvestorChat from './pages/investor/InvestorChat'
 import InvestorProfile from './pages/investor/InvestorProfile'
+import InvestorSmartMatches from './pages/investor/SmartMatches'
 import MentorDashboard from './pages/MentorDashboard'
 import AccessDenied from './pages/AccessDenied'
 
@@ -59,6 +61,7 @@ function App() {
         <Route path="learning-hub" element={<EntrepreneurLearningHub />} />
         <Route path="government-schemes" element={<EntrepreneurGovernmentSchemes />} />
         <Route path="ngo-connect" element={<EntrepreneurNGOConnect />} />
+        <Route path="smart-matches" element={<EntrepreneurSmartMatches />} />
         <Route path="profile" element={<EntrepreneurProfile />} />
       </Route>
       
@@ -70,6 +73,7 @@ function App() {
         <Route index element={<InvestorDashboard />} />
         <Route path="my-investments" element={<MyInvestments />} />
         <Route path="chat" element={<InvestorChat />} />
+        <Route path="smart-matches" element={<InvestorSmartMatches />} />
         <Route path="profile" element={<InvestorProfile />} />
       </Route>
       

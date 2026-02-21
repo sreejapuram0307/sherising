@@ -37,6 +37,10 @@ const ideaSchema = new mongoose.Schema({
   likes: {
     type: Number,
     default: 0
+  },
+  location: {
+    type: String,
+    required: true
   }
 }, {
   timestamps: true

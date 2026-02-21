@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import InvestModal from '../../components/InvestModal'
+import IdeaChatModal from '../../components/IdeaChatModal'
 import { ideaAPI, investorAPI } from '../../utils/api'
 
 const InvestorDashboard = () => {
@@ -11,6 +12,8 @@ const InvestorDashboard = () => {
   })
   const [selectedIdea, setSelectedIdea] = useState(null)
   const [showModal, setShowModal] = useState(false)
+  const [showChatModal, setShowChatModal] = useState(false)
+  const [chatIdea, setChatIdea] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -41,6 +44,11 @@ const InvestorDashboard = () => {
   const handleInvest = (idea) => {
     setSelectedIdea(idea)
     setShowModal(true)
+  }
+
+  const handleOpenChat = (idea) => {
+    setChatIdea(idea)
+    setShowChatModal(true)
   }
 
   const confirmInvestment = async (amount) => {
@@ -165,12 +173,18 @@ const InvestorDashboard = () => {
                 <p className="text-sm text-purple-600">{idea.entrepreneurEmail}</p>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 <button
                   onClick={() => handleLike(idea._id)}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-pink-50 text-gray-700 transition-all"
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-pink-50 text-gray-700 transition-all"
                 >
                   ❤️ {idea.likes}
+                </button>
+                <button
+                  onClick={() => handleOpenChat(idea)}
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-blue-100 hover:bg-blue-200 text-blue-700 transition-all"
+                >
+                  💬 Chat
                 </button>
                 <button
                   onClick={() => handleInvest(idea)}
@@ -189,6 +203,13 @@ const InvestorDashboard = () => {
           idea={selectedIdea}
           onClose={() => setShowModal(false)}
           onConfirm={confirmInvestment}
+        />
+      )}
+
+      {showChatModal && chatIdea && (
+        <IdeaChatModal
+          idea={chatIdea}
+          onClose={() => setShowChatModal(false)}
         />
       )}
     </div>

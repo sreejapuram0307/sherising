@@ -130,3 +130,55 @@ export const profileAPI = {
     return response.json()
   }
 }
+
+export const ideaChatAPI = {
+  getMessages: async (ideaId) => {
+    const response = await fetch(`${API_URL}/idea-chat/${ideaId}/messages`, {
+      headers: getAuthHeader()
+    })
+    return response.json()
+  },
+
+  sendMessage: async (ideaId, message) => {
+    const response = await fetch(`${API_URL}/idea-chat/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeader()
+      },
+      body: JSON.stringify({ ideaId, message })
+    })
+    return response.json()
+  },
+
+  getParticipants: async (ideaId) => {
+    const response = await fetch(`${API_URL}/idea-chat/${ideaId}/participants`, {
+      headers: getAuthHeader()
+    })
+    return response.json()
+  },
+
+  markAsRead: async (ideaId) => {
+    const response = await fetch(`${API_URL}/idea-chat/${ideaId}/read`, {
+      method: 'PUT',
+      headers: getAuthHeader()
+    })
+    return response.json()
+  }
+}
+
+export const matchAPI = {
+  getEntrepreneurMatches: async () => {
+    const response = await fetch(`${API_URL}/matches/entrepreneur`, {
+      headers: getAuthHeader()
+    })
+    return response.json()
+  },
+
+  getInvestorMatches: async () => {
+    const response = await fetch(`${API_URL}/matches/investor`, {
+      headers: getAuthHeader()
+    })
+    return response.json()
+  }
+}

@@ -6,7 +6,9 @@ import authRoutes from './routes/authRoutes.js'
 import ideaRoutes from './routes/ideaRoutes.js'
 import investorRoutes from './routes/investorRoutes.js'
 import chatRoutes from './routes/chatRoutes.js'
+import ideaChatRoutes from './routes/ideaChatRoutes.js'
 import profileRoutes from './routes/profileRoutes.js'
+import matchRoutes from './routes/matchRoutes.js'
 
 dotenv.config()
 
@@ -24,7 +26,9 @@ app.use('/api', authRoutes)
 app.use('/api/ideas', ideaRoutes)
 app.use('/api/investor', investorRoutes)
 app.use('/api/chat', chatRoutes)
+app.use('/api/idea-chat', ideaChatRoutes)
 app.use('/api/profile', profileRoutes)
+app.use('/api/matches', matchRoutes)
 
 // Health check
 app.get('/', (req, res) => {

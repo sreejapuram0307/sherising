@@ -7,6 +7,7 @@ const LoginPage = ({ setIsAuthenticated, setUserRole }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('')
+  const [location, setLocation] = useState('')
   const [isLogin, setIsLogin] = useState(true)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -17,7 +18,7 @@ const LoginPage = ({ setIsAuthenticated, setUserRole }) => {
   const handleSubmit = async () => {
     setError('')
     
-    if (!email || !password || (!isLogin && (!fullName || !role))) {
+    if (!email || !password || (!isLogin && (!fullName || !role || !location))) {
       setError('Please fill all fields')
       return
     }
@@ -34,7 +35,7 @@ const LoginPage = ({ setIsAuthenticated, setUserRole }) => {
       if (isLogin) {
         result = await authAPI.login({ email, password })
       } else {
-        result = await authAPI.register({ name: fullName, email, password, role })
+        result = await authAPI.register({ name: fullName, email, password, role, location })
       }
 
       if (result.success) {
@@ -148,21 +149,36 @@ const LoginPage = ({ setIsAuthenticated, setUserRole }) => {
             </div>
 
             {!isLogin && (
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Role
-                </label>
-                <select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none px-4 py-3 text-gray-800 transition-all"
-                >
-                  <option value="">Select your role</option>
-                  {roles.map(r => (
-                    <option key={r} value={r}>{r}</option>
-                  ))}
-                </select>
-              </div>
+              <>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Role
+                  </label>
+                  <select
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none px-4 py-3 text-gray-800 transition-all"
+                  >
+                    <option value="">Select your role</option>
+                    {roles.map(r => (
+                      <option key={r} value={r}>{r}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Location (City) <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    placeholder="e.g., Hyderabad, Mumbai, Bangalore"
+                    className="w-full rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none px-4 py-3 text-gray-800 transition-all"
+                  />
+                </div>
+              </>
             )}
           </div>
 

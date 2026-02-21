@@ -9,6 +9,7 @@ const Dashboard = () => {
   const [language, setLanguage] = useState('en-IN')
   const [category, setCategory] = useState('')
   const [fundingGoal, setFundingGoal] = useState('')
+  const [location, setLocation] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
@@ -59,8 +60,8 @@ const Dashboard = () => {
   const handlePostIdea = async () => {
     setError('')
     
-    if (!title || !description || !category || !fundingGoal) {
-      setError('Please fill all fields')
+    if (!title || !description || !category || !fundingGoal || !location) {
+      setError('Please fill all fields including location')
       return
     }
 
@@ -71,7 +72,8 @@ const Dashboard = () => {
         title,
         description,
         category,
-        fundingGoal: parseFloat(fundingGoal)
+        fundingGoal: parseFloat(fundingGoal),
+        location
       })
 
       if (result.success) {
@@ -79,6 +81,7 @@ const Dashboard = () => {
         setDescription('')
         setCategory('')
         setFundingGoal('')
+        setLocation('')
         navigate('/entrepreneur-dashboard/my-ideas')
       } else {
         setError(result.message || 'Failed to post idea')
@@ -178,6 +181,17 @@ const Dashboard = () => {
                 className="w-full rounded-2xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none px-4 py-3 bg-white"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Location (City)</label>
+            <input
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="e.g., Hyderabad, Mumbai, Bangalore"
+              className="w-full rounded-2xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none px-4 py-3 bg-white"
+            />
           </div>
 
           <button

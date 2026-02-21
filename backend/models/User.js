@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Role is required'],
     enum: ['Entrepreneur', 'Investor', 'Mentor'],
     default: 'Entrepreneur'
+  },
+  location: {
+    type: String,
+    required: [true, 'Location is required'],
+    trim: true
   }
 }, {
   timestamps: true

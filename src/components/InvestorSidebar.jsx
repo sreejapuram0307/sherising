@@ -5,6 +5,7 @@ const InvestorSidebar = ({ isOpen }) => {
     { path: '/investor-dashboard', label: 'Dashboard', icon: '📊', end: true },
     { path: '/investor-dashboard/my-investments', label: 'My Investments', icon: '💰' },
     { path: '/investor-dashboard/chat', label: 'Chat', icon: '💬' },
+    { path: '/investor-dashboard/smart-matches', label: 'Smart Matches', icon: '🎯' },
   ]
 
   return (
