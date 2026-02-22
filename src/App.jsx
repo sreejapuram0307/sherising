@@ -47,9 +47,10 @@ function App() {
   }
 
   return (
-    <Routes>
-      <Route path="/" element={<SplashPage />} />
-      <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} setUserRole={setUserRole} />} />
+    <>
+      <Routes>
+        <Route path="/" element={<SplashPage />} />
+        <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} setUserRole={setUserRole} />} />
       
       <Route path="/entrepreneur-dashboard" element={
         <ProtectedRoute allowedRole="Entrepreneur">
@@ -94,7 +95,8 @@ function App() {
           <Leaderboard />
         </ProtectedRoute>
       } />
-    </Routes>
+      </Routes>
+    </>
   )
 }
 
